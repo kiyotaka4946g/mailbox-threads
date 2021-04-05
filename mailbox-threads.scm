@@ -11,9 +11,16 @@
     thread-mailbox-rewind
     thread-mailbox-extract-and-rewind)
 
-(import chicken scheme)
+(import scheme)
 
-(require-library srfi-18)
+(cond-expand
+  (chicken-4
+    (import chicken) 
+    (require-library srfi-18)
+    (use mailbox))
+  (chicken-5 (import (chicken base) mailbox))
+  (else "Unsupported chicken version."))
+
 (import
   (except srfi-18
    thread?
@@ -29,7 +36,6 @@
    thread-specific-set!
    thread-specific
   thread-start!) thread:))
-(use mailbox)
 
 (define *tag* 'mboxthread)
 
